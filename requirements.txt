@@ -2,10 +2,12 @@ autopep8==1.7.0
 beautifulsoup4==4.11.1
 certifi==2022.9.24
 charset-normalizer==2.1.1
+colorama==0.4.5
 html5lib==1.1
 idna==3.4
 mechanize==0.4.8
 pycodestyle==2.9.1
+pyfiglet==0.8.post1
 pygeoip==0.3.2
 pyPdf==1.13
 python-nmap==0.7.1

@@ -4,8 +4,42 @@ import sys
 import hashlib
 import crypt
 import requests
+from pyfiglet import Figlet
+import colorama
+from colorama import Fore
+from colorama import Style
+
 
 # Repeated Functionalities
+
+colorama.init()
+custom_fig = Figlet(font="slant").renderText("Python\nOffensive\nTools")
+print(f"{Fore.GREEN}{custom_fig}{Style.RESET_ALL}")
+print("Made By Mohab Gabber. https://twitter.com/fuckhumanity12s")
+
+
+def successprint(text):
+    print(f'''
+        {Fore.GREEN}\n
+        {text}
+        {Style.RESET_ALL}
+    ''')
+
+
+def failprint(text):
+    print(f'''
+        {Fore.RED}\n
+        {text}
+        {Style.RESET_ALL}
+    ''')
+
+
+def infoprint(text):
+    print(f'''
+        {Fore.YELLOW}
+        {text}
+        {Style.RESET_ALL}
+    ''')
 
 
 def filecheckr(file):
@@ -21,7 +55,7 @@ def filecheckr(file):
 class Networking:
     def networkintro():
         while True:
-            print('''
+            infoprint('''
             Available Tools
                 0 - Banner Grab
                 100 - Back To Main Menu
@@ -30,7 +64,8 @@ class Networking:
             if choice == 0:
                 ip = input("Please Enter Ip: ")
                 port = int(input("Please Enter Port: "))
-                print(f"\n\n{Networking.BannerGrab(ip, port)}")
+                # print(f"\n\n{Networking.BannerGrab(ip, port)}")
+                Networking.BannerGrab(ip, port)
             elif choice == 100:
                 break
 
@@ -40,15 +75,17 @@ class Networking:
         try:
             s.connect((str(ip), port))
             ban = s.recv(1024)
-            return f"[*] The Returned Banner:\n {str(ban)}\n\n"
+            successprint(f"[*] The Returned Banner:\t {str(ban)}")
+            return
         except Exception as e:
-            return f"[-] Error = {str(e)}"
+            failprint(f"[-] Error = {str(e)}")
+            return
 
 
 class Crypto:
     def cryptointro():
         while True:
-            print('''
+            infoprint('''
             Available Tools
                 0 - Hash Cracker
                 1 - Shadow Cracker
@@ -60,7 +97,7 @@ class Crypto:
                 hash = input("Please Paste The Hash To Crack: ")
                 wordlist = input(
                     "Please Enter The Full Path To The Wordlist: ")
-                print('''
+                infoprint('''
                 Choose Hashing Algorithm:
                     0 - md5
                     1 - sha1
@@ -98,13 +135,17 @@ class Crypto:
                 elif algo == 5:
                     hashsum = hashlib.sha512(w.encode("utf-8")).hexdigest()
                 else:
-                    return "Invalid Algorithm"
+                    failprint("Invalid Algorithm")
+                    return
                 if hashsum == hash:
-                    return f"\n\n[*] Found Password: {w}\n"
+                    successprint(f"[*] Found Password: {w}\n")
+                    return
                     break
-            print("\n\n[-] Password Not Found.\n")
+            failprint("[-] Password Not Found.")
         else:
-            return f"The file {wordlist} \nis either doesn't exist or is unreadable."
+            failprint(
+                f"The file {wordlist} either doesn't exist or is unreadable.")
+            return
 
     def ShadowCracker(shadow, wordlist):
         if filecheckr(wordlist) == True:
@@ -124,18 +165,21 @@ class Crypto:
                             w = word.strip("\n")
                             crypthash = crypt.crypt(w, saltfin)
                             if crypthash == hash:
-                                print(
-                                    f"\n\n[*] Password Found, User: {user} Password: {w}\n\n with hash: {crypthash}")
+                                successprint(
+                                    f"[*] Password Found, User: {user} Password: {w}\t with hash: {crypthash}")
                                 break
-
+            else:
+                failprint(
+                    f"The file {shadow} either doesn't exist or is unreadable.")
         else:
-            return f"The file {wordlist} \nis either doesn't exist or is unreadable."
+            failprint(
+                f"The file {wordlist} either doesn't exist or is unreadable.")
 
 
 class Web:
     def webintro():
         while True:
-            print('''
+            infoprint('''
             Available Tools
                 0 - Directory BruteForcing
                 100 - Back To Main Menu
@@ -155,11 +199,11 @@ class Web:
             hostup = False
             try:
                 req = requests.get(url)
-                print(
-                    f"\n\nHost Is Up, Returned Response Code: {req.status_code}")
+                successprint(
+                    f"Host Is Up, Returned Response Code: {req.status_code}")
                 hostup = True
             except:
-                print(f"\n\nThe URL: {url} Is Unavailable")
+                failprint(f"The URL: {url} Is Unavailable")
             if hostup:
                 wlist = open(wordlist, 'r')
                 for word in wlist.readlines():
@@ -168,15 +212,18 @@ class Web:
                     if tryreq.status_code in invresp:
                         pass
                     else:
-                        print(
-                            f"\n\nThe Path: /{w} Is Available, With Status Code: {str(tryreq.status_code)}")
+                        successprint(
+                            f"The Path: /{w} Is Available, With Status Code: {str(tryreq.status_code)}")
+        else:
+            failprint(
+                f"The file {wordlist} either doesn't exist or is unreadable.")
 
 
 def main():
     while True:
-        print('''
-        Available Modules 
-            0 - Cryptography 
+        infoprint('''
+        Available Modules
+            0 - Cryptography
             1 - Networking
             2 - Web
             700 - exit
