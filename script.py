@@ -108,8 +108,8 @@ class Crypto:
         if filecheckr(wordlist) == True:
             if filecheckr(shadow) == True:
                 shfile = open(shadow, 'r')
-                wlist = open(wordlist, 'r')
                 for line in shfile.readlines():
+                    wlist = open(wordlist, 'r')
                     splitted = line.split(":")
                     if splitted[1] == "!*" or splitted[1] == "":
                         pass
@@ -118,14 +118,12 @@ class Crypto:
                         hash = splitted[1]
                         salt0 = hash.split("$")
                         saltfin = f"${salt0[1]}${salt0[2]}"
-                        print(f"trying {user}, {hash}")
                         for word in wlist.readlines():
                             w = word.strip("\n")
                             crypthash = crypt.crypt(w, saltfin)
-
                             if crypthash == hash:
                                 print(
-                                    f"\n\n[*] Password Found, User: {user} Password: {w}\n\n the hash: {crypthash}")
+                                    f"\n\n[*] Password Found, User: {user} Password: {w}\n\n with hash: {crypthash}")
                                 break
 
         else:
