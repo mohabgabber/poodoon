@@ -3,6 +3,7 @@ import os
 import sys
 import hashlib
 import crypt
+import requests
 
 # Repeated Functionalities
 
@@ -51,6 +52,7 @@ class Crypto:
             Available Tools
                 0 - Hash Cracker
                 1 - Shadow Cracker
+
                 100 - Back To Main Menu
         ''')
             choice = int(input("Choose The Desired Tool's Number: "))
@@ -130,12 +132,52 @@ class Crypto:
             return f"The file {wordlist} \nis either doesn't exist or is unreadable."
 
 
+class Web:
+    def webintro():
+        while True:
+            print('''
+            Available Tools
+                0 - Directory BruteForcing
+                100 - Back To Main Menu
+        ''')
+            choice = int(input("Choose the desired tool's number: "))
+            if choice == 0:
+                url = input("Please enter the target URL (With http/https): ")
+                wordlist = input("Please enter a fullpath of a wordlist: ")
+                Web.DirectoryFuzzing(url, wordlist)
+            elif choice == 100:
+                break
+
+    def DirectoryFuzzing(url, wordlist):
+        if filecheckr(wordlist) == True:
+            req = requests.get(url)
+            invresp = [500, 501, 502, 503, 504,
+                       505, 506, 507, 508, 509, 510, 511, 404]
+            hostup = False
+            if not req.status_code in invresp:
+                hostup = True
+            else:
+                print(
+                    f"The URL: {url} Is Unavailable, Response Code: {req.status_code}")
+            if hostup:
+                wlist = open(wordlist, 'r')
+                for word in wlist.readlines():
+                    w = word.strip("\n")
+                    tryreq = requests.get(f"{url}/{w}")
+                    if tryreq.status_code in invresp:
+                        pass
+                    else:
+                        print(
+                            f"\n\nThe Path: /{w} Is Available, With Status Code: {str(tryreq.status_code)}")
+
+
 def main():
     while True:
         print('''
         Available Modules 
             0 - Cryptography 
             1 - Networking
+            2 - Web
             700 - exit
         ''')
         choice = int(input("Insert The Desired Module's Number: "))
@@ -143,6 +185,8 @@ def main():
             Crypto.cryptointro()
         elif choice == 1:
             Networking.networkintro()
+        elif choice == 2:
+            Web.webintro()
         elif choice == 700:
             print("I will miss you <3")
             break
