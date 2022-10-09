@@ -150,15 +150,16 @@ class Web:
 
     def DirectoryFuzzing(url, wordlist):
         if filecheckr(wordlist) == True:
-            req = requests.get(url)
             invresp = [500, 501, 502, 503, 504,
                        505, 506, 507, 508, 509, 510, 511, 404]
             hostup = False
-            if not req.status_code in invresp:
-                hostup = True
-            else:
+            try:
+                req = requests.get(url)
                 print(
-                    f"The URL: {url} Is Unavailable, Response Code: {req.status_code}")
+                    f"\n\nHost Is Up, Returned Response Code: {req.status_code}")
+                hostup = True
+            except:
+                print(f"\n\nThe URL: {url} Is Unavailable")
             if hostup:
                 wlist = open(wordlist, 'r')
                 for word in wlist.readlines():
