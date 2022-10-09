@@ -192,9 +192,11 @@ class Crypto:
                     return
                 try:
                     zfile.extractall(pwd="testing".encode())
-                except:
+                except NotImplementedError:
                     zfile = pyzipper.AESZipFile(zifile)
                     isnew = True
+                except:
+                    pass
                 wlist = open(wordlist, 'r')
                 for word in wlist.readlines():
                     try:
