@@ -1,5 +1,7 @@
 import socket
 import os
+import zipfile
+import pyzipper
 import sys
 import hashlib
 import crypt
@@ -89,7 +91,7 @@ class Crypto:
             Available Tools
                 0 - Hash Cracker
                 1 - Shadow Cracker
-
+                2 - Zip File Brute Force
                 100 - Back To Main Menu
         ''')
             choice = int(input("Choose The Desired Tool's Number: "))
@@ -113,6 +115,10 @@ class Crypto:
                 shadow = input("Please Enter The Shadow File: ")
                 wordlist = input("Please Enter The Wordlist: ")
                 Crypto.ShadowCracker(shadow, wordlist)
+            elif choice == 2:
+                zipfile = input("Please Enter The Target ZipFile: ")
+                wordlist = input("Please Enter The Wordlist: ")
+                Crypto.ZipCracker(zipfile, wordlist)
             elif choice == 100:
                 break
 
@@ -174,6 +180,40 @@ class Crypto:
         else:
             failprint(
                 f"The file {wordlist} either doesn't exist or is unreadable.")
+
+    def ZipCracker(zifile, wordlist):
+        if filecheckr(zifile) == True:
+            if filecheckr(wordlist) == True:
+                isnew = False
+                try:
+                    zfile = zipfile.ZipFile(zifile)
+                except:
+                    failprint(f"The File {zifile}, Is Not A Zip File")
+                    return
+                try:
+                    zfile.extractall(pwd="testing".encode())
+                except:
+                    zfile = pyzipper.AESZipFile(zifile)
+                    isnew = True
+                wlist = open(wordlist, 'r')
+                for word in wlist.readlines():
+                    try:
+                        w = word.strip("\n")
+                        if isnew:
+                            zfile.setpassword(w.encode())
+                            zfile.extractall()
+                        else:
+                            zfile.extractall(pwd=w.encode())
+                        successprint(
+                            f"Extraction Successful, The Password Is {w}")
+                    except:
+                        pass
+            else:
+                failprint(
+                    f"The file {wordlist} either doesn't exist or is unreadable.")
+        else:
+            failprint(
+                f"The file {zifile} either doesn't exist or is unreadable.")
 
 
 class Web:
