@@ -5,6 +5,21 @@ import hashlib
 
 
 class Networking:
+    def networkintro():
+        while True:
+            print('''
+            Available Tools
+                0 - Banner Grab
+                100 - Back To Main Menu
+            ''')
+            choice = int(input("Choose The Desired Tools' Number: "))
+            if choice == 0:
+                ip = input("Please Enter Ip: ")
+                port = int(input("Please Enter Port: "))
+                print(f"\n\n{Networking.BannerGrab(ip, port)}")
+            elif choice == 100:
+                break
+
     def BannerGrab(ip, port):
         socket.setdefaulttimeout(2)
         s = socket.socket()
@@ -17,6 +32,22 @@ class Networking:
 
 
 class Crypto:
+    def cryptointro():
+        while True:
+            print('''
+            Available Tools
+                0 - Sha512 Cracker
+                100 - Back To Main Menu
+        ''')
+            choice = int(input("Choose The Desired Tools' Number: "))
+            if choice == 0:
+                hash = input("Please Paste The Hash To Crack: ")
+                wordlist = input(
+                    "Please Enter The Full Path To The Wordlist: ")
+                print(Crypto.Sha512Cracker(hash, wordlist))
+            elif choice == 100:
+                break
+
     def Sha512Cracker(hash, wordlist):
         if not os.path.isfile(wordlist):
             return f"The File {wordlist}\n Doesn't Exist!"
@@ -32,51 +63,21 @@ class Crypto:
         print("\n\n[-] Password Not Found.\n")
 
 
-def cryptointro():
-    while True:
-        print('''
-        Available Tools
-            0 - Sha512 Cracker
-            100 - Back To Main Menu
-    ''')
-        choice = int(input("Choose The Desired Tools' Number: "))
-        if choice == 0:
-            hash = input("Please Paste The Hash To Crack: ")
-            wordlist = input("Please Enter The Full Path To The Wordlist: ")
-            print(Crypto.Sha512Cracker(hash, wordlist))
-        elif choice == 100:
-            break
-
-
-def networkintro():
-    while True:
-        print('''
-        Available Tools
-            0 - Banner Grab
-            100 - Back To Main Menu
-        ''')
-        choice = int(input("Choose The Desired Tools' Number: "))
-        if choice == 0:
-            ip = input("Please Enter Ip: ")
-            port = int(input("Please Enter Port: "))
-            print(f"\n\n{Networking.BannerGrab(ip, port)}")
-        elif choice == 100:
-            break
-
-
 def main():
     while True:
-        print("Please Press CTRL + C To Exit The Script")
         print('''
         Available Modules 
             0 - Cryptography 
-            1 - Networking 
+            1 - Networking
+            700 - exit
         ''')
         choice = int(input("Insert The Desired Modules' Number: "))
         if choice == 0:
-            cryptointro()
+            Crypto.cryptointro()
         elif choice == 1:
-            networkintro()
+            Networking.networkintro()
+        elif choice == 700:
+            break
 
 
 if __name__ == "__main__":
