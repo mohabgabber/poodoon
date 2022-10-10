@@ -2,6 +2,7 @@ import socket
 import os
 import zipfile
 import pyzipper
+import nmap
 import sys
 import hashlib
 import crypt
@@ -21,27 +22,15 @@ print("Made By Mohab Gabber. https://twitter.com/fuckhumanity12s")
 
 
 def successprint(text):
-    print(f'''
-        {Fore.GREEN}\n
-        {text}
-        {Style.RESET_ALL}
-    ''')
+    print(f'''{Fore.GREEN}{text}{Style.RESET_ALL}''')
 
 
 def failprint(text):
-    print(f'''
-        {Fore.RED}\n
-        {text}
-        {Style.RESET_ALL}
-    ''')
+    print(f'''{Fore.RED}{text}{Style.RESET_ALL}''')
 
 
 def infoprint(text):
-    print(f'''
-        {Fore.YELLOW}
-        {text}
-        {Style.RESET_ALL}
-    ''')
+    print(f'''{Fore.YELLOW}{text}{Style.RESET_ALL}''')
 
 
 def filecheckr(file):
@@ -60,6 +49,7 @@ class Networking:
             infoprint('''
             Available Tools
                 0 - Banner Grab
+                1 - Nmap Scan
                 100 - Back To Main Menu
             ''')
             choice = int(input("Choose The Desired Tools' Number: "))
@@ -68,6 +58,12 @@ class Networking:
                 port = int(input("Please Enter Port: "))
                 # print(f"\n\n{Networking.BannerGrab(ip, port)}")
                 Networking.BannerGrab(ip, port)
+            elif choice == 1:
+                infoprint("You Whole Network, Example: '192.168.1.0/24'")
+                ip = input("Please Enter An Ip To Scan: ")
+                arguments = input(
+                    "Please Enter Your Nmap Arguments, (Same As nmap cli): ")
+                Networking.PortScan(ip, arguments)
             elif choice == 100:
                 break
 
@@ -82,6 +78,22 @@ class Networking:
         except Exception as e:
             failprint(f"[-] Error = {str(e)}")
             return
+
+    def PortScan(ip, arguments):
+        nm = nmap.PortScanner()
+        nm.scan(hosts=ip, arguments=arguments)
+        for host in nm.all_hosts():
+            print("-"*50)
+            successprint(f"Host: {host} ({nm[host].hostname()})")
+            successprint(f"State: {nm[host].state()}")
+            for proto in nm[host].all_protocols():
+                print("-"*50)
+                successprint(f"Protocol: {proto}")
+                ports = nm[host][proto].keys()
+                ports
+                for port in ports:
+                    successprint(
+                        f"Port: {port}\tState: {nm[host][proto][port]['state']}\tReason: {nm[host][proto][port]['reason']}\tName: {nm[host][proto][port]['name']}\tProduct: {nm[host][proto][port]['product']}\tVersion: {nm[host][proto][port]['version']}")
 
 
 class Crypto:
