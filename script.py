@@ -11,7 +11,7 @@ from pyfiglet import Figlet
 import colorama
 from colorama import Fore
 from colorama import Style
-
+import string
 
 # Functionalities
 
@@ -104,6 +104,7 @@ class Crypto:
                 0 - Hash Cracker
                 1 - Shadow Cracker
                 2 - Zip File Brute Force
+                3 - Cracking Caesar Cipher
                 100 - Back To Main Menu
         ''')
             choice = int(input("Choose The Desired Tool's Number: "))
@@ -131,6 +132,9 @@ class Crypto:
                 zipfile = input("Please Enter The Target ZipFile: ")
                 wordlist = input("Please Enter The Wordlist: ")
                 Crypto.ZipCracker(zipfile, wordlist)
+            elif choice == 3:
+                message = input("Please Enter The Message You Wanna Crack: ")
+                Crypto.caesarcrack(message)
             elif choice == 100:
                 break
 
@@ -228,6 +232,16 @@ class Crypto:
         else:
             failprint(
                 f"The file {zifile} either doesn't exist or is unreadable.")
+    
+    def caesarcrack(message):
+        printables = string.printable
+        for key in range(len(printables)):
+            plaintext = ''
+            for char in message:
+                index = printables.index(char)
+                op = (index - key - 2) % len(printables)
+                plaintext += printables[op]
+            infoprint(f"when using the key: {key} the text is: {plaintext}")
 
 
 class Web:
