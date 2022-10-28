@@ -12,6 +12,8 @@ Included Tools:
   * Nmap Port Scanner
 * Web
   * Directory Brute Forcing
+* Misc
+  * Wordlist Combiner
   
   
 Lots of other tools are coming soon, until now i'm just experimenting with this idea
