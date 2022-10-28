@@ -13,7 +13,7 @@ from colorama import Fore
 from colorama import Style
 
 
-# Repeated Functionalities
+# Functionalities
 
 colorama.init()
 custom_fig = Figlet(font="slant").renderText("Python\nOffensive\nTools")
@@ -170,7 +170,7 @@ class Crypto:
             if filecheckr(shadow) == True:
                 shfile = open(shadow, 'r')
                 for line in shfile.readlines():
-                    wlist = open(wordlist, 'r')
+                    wlist = open(wordlist, 'r', encoding="EUC-JP")
                     splitted = line.split(":")
                     if splitted[1] == "!*" or splitted[1] == "":
                         pass
@@ -272,6 +272,48 @@ class Web:
             failprint(
                 f"The file {wordlist} either doesn't exist or is unreadable.")
 
+class Misc:
+    def miscintro():
+        while True:
+            infoprint('''
+            Available Tools
+                0 - Wordlist Combiner
+                100 - Back To Main Menu
+        ''')
+            choice = int(input("Choose the desired tool's number: "))
+            if choice == 0:
+                infoprint("Make Sure To Add A New Line At The End Of The First Wordlist.")
+                finfile = input("Please enter the name of the file you wanna combine into: ")
+                wordlist1 = input("Please enter the first wordlist: ")
+                wordlist2 = input("Please enter the second wordlist: ")
+                Misc.wordlistcombiner(finfile, wordlist1, wordlist2)
+            elif choice == 100:
+                break
+    def wordlistcombiner(finfile, wordlist1, wordlist2):
+        if filecheckr(finfile) and filecheckr(wordlist1) and filecheckr(wordlist2):
+            successprint("[+] Reading Wordlists")
+            wl1 = open(wordlist1, 'r').readlines()
+            wl2 = open(wordlist2, 'r').readlines()
+            finf = open(finfile, 'a')
+            for line in wl1:
+                finf.write(line)
+            if wl1[-1] != '\n':
+                finf.write("\n")
+            for line in wl2:
+                isrepeated = False
+                finr = open(finfile, "r")
+                for lin in finr.readlines():
+                    if lin == line:
+                        isrepeated = True
+                        break
+                if isrepeated == True:
+                    pass
+                else:
+                    finf.write(line)
+            successprint(f"Finished Merging Wordlists Into File: {finfile}")
+        else:
+            failprint(f"The files you entered don't exist or are unreadable.")
+
 
 def main():
     while True:
@@ -280,6 +322,7 @@ def main():
             0 - Cryptography
             1 - Networking
             2 - Web
+            3 - Misc
             700 - exit
         ''')
         choice = int(input("Insert The Desired Module's Number: "))
@@ -289,6 +332,8 @@ def main():
             Networking.networkintro()
         elif choice == 2:
             Web.webintro()
+        elif choice == 3:
+            Misc.miscintro()
         elif choice == 700:
             print("I will miss you <3")
             break
