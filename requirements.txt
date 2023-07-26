@@ -1,7 +1,7 @@
 autopep8==1.7.0
 beautifulsoup4==4.11.1
 Brotli==1.0.9
-certifi==2022.12.7
+certifi==2023.7.22
 charset-normalizer==2.1.1
 colorama==0.4.5
 html5lib==1.1
